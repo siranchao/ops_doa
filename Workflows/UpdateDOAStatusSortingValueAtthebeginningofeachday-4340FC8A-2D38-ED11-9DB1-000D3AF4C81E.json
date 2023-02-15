@@ -1,0 +1,175 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "Recurrence": {
+          "recurrence": {
+            "frequency": "Day",
+            "interval": 1,
+            "startTime": "2022-09-19T04:30:00Z"
+          },
+          "metadata": {
+            "operationMetadataId": "4a2642fa-1c41-45b1-a55d-a0a24a3cf968"
+          },
+          "type": "Recurrence"
+        }
+      },
+      "actions": {
+        "List_rows": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "6a45e775-6b6e-40a9-8fbf-295f3631fcce"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "ListRecords",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "cr9fa_doarecordses",
+              "$filter": "cr9fa_doastatus eq 1"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Apply_to_each": {
+          "foreach": "@outputs('List_rows')?['body/value']",
+          "actions": {
+            "Condition": {
+              "actions": {
+                "Update_a_row": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "67789bad-2f9a-4512-bff2-fdf2afcdc229"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "UpdateRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "cr9fa_doarecordses",
+                      "recordId": "@items('Apply_to_each')?['cr9fa_doarecordsid']",
+                      "item/cr9fa_doastatussortvalue": 3
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                }
+              },
+              "runAfter": {},
+              "else": {
+                "actions": {
+                  "Condition_2": {
+                    "actions": {
+                      "Update_a_row_2": {
+                        "runAfter": {},
+                        "metadata": {
+                          "operationMetadataId": "271795ce-ff11-4d17-8551-390ffe2674fe"
+                        },
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "host": {
+                            "connectionName": "shared_commondataserviceforapps",
+                            "operationId": "UpdateRecord",
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                          },
+                          "parameters": {
+                            "entityName": "cr9fa_doarecordses",
+                            "recordId": "@items('Apply_to_each')?['cr9fa_doarecordsid']",
+                            "item/cr9fa_doastatussortvalue": 2
+                          },
+                          "authentication": "@parameters('$authentication')"
+                        }
+                      }
+                    },
+                    "runAfter": {},
+                    "else": {
+                      "actions": {
+                        "Update_a_row_3": {
+                          "runAfter": {},
+                          "metadata": {
+                            "operationMetadataId": "ce035a69-96e7-4808-82a8-92ebf13f5e82"
+                          },
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_commondataserviceforapps",
+                              "operationId": "UpdateRecord",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                            },
+                            "parameters": {
+                              "entityName": "cr9fa_doarecordses",
+                              "recordId": "@items('Apply_to_each')?['cr9fa_doarecordsid']",
+                              "item/cr9fa_doastatussortvalue": 1
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          }
+                        }
+                      }
+                    },
+                    "expression": {
+                      "equals": [
+                        "@items('Apply_to_each')?['cr9fa_doa_status']",
+                        0
+                      ]
+                    },
+                    "metadata": {
+                      "operationMetadataId": "1f1ece76-9b28-4a0c-8e93-4de95c71832a"
+                    },
+                    "type": "If"
+                  }
+                }
+              },
+              "expression": {
+                "equals": [
+                  "@items('Apply_to_each')?['cr9fa_doa_status']",
+                  1
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "41c652a4-fef1-4d20-82ef-3f51fc0ef1c5"
+              },
+              "type": "If"
+            }
+          },
+          "runAfter": {
+            "List_rows": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "bf0601f0-9276-43ec-9bfb-b39dc7401999"
+          },
+          "type": "Foreach"
+        }
+      }
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

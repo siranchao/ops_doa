@@ -1,0 +1,118 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_sendmail": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "rpdudev_sharedsendmail_e1dd0"
+        },
+        "api": {
+          "name": "shared_sendmail"
+        }
+      },
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "rpdudev_sharedcommondataserviceforapps_5e294"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "When_a_row_is_added,_modified_or_deleted": {
+          "metadata": {
+            "operationMetadataId": "30b67fb1-b522-45ad-8142-b0aca290983b"
+          },
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "subscriptionRequest/message": 1,
+              "subscriptionRequest/entityname": "cr9fa_doarecords",
+              "subscriptionRequest/scope": 2
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Initialize_variable": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "b6c9dbab-04ea-463e-b0b8-0c8553d9986b"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "NotifyList",
+                "type": "string",
+                "value": "@triggerOutputs()?['body/cr9fa_notificationlist']"
+              }
+            ]
+          }
+        },
+        "Condition": {
+          "actions": {
+            "Send_an_email_notification_(V3)_2": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "78287d71-58d8-4e53-8cf3-40bd90d128a7"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_sendmail",
+                  "operationId": "SendEmailV3",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sendmail"
+                },
+                "parameters": {
+                  "request/to": "@{variables('NotifyList')};",
+                  "request/subject": "New DOA Created - Delegation of Authority for @{triggerOutputs()?['body/cr9fa_authorized']} - @{triggerOutputs()?['body/cr9fa_owner']}",
+                  "request/text": "<main style=\"font-family: Open Sans;\n             color: #1A1A1A;\n             font-weight: 400;\n             line-height: 1.6;\">\n\n    <div>\n        <p style=\"font-size: 16px\"><strong>@{triggerOutputs()?['body/cr9fa_ministry']}</strong>\n        <br><span>@{triggerOutputs()?['body/cr9fa_department']}</span>\n        </p>\n        <br><br><br>\n        <h3>Subject:  Delegation of Authority, <span>@{triggerOutputs()?['body/cr9fa_delegator']}</span> - <span>@{triggerOutputs()?['body/createdon']}</span></h3>\n    </div>\n    <hr>\n\n    <p style=\"font-size: 16px;\">\n        <span><strong>Please be advised that a new Delegation of Authority record has been created for </strong></span><span><strong>@{triggerOutputs()?['body/cr9fa_authorized']}</strong></span><span><strong> on behalf of </strong></span><span><strong>@{triggerOutputs()?['body/cr9fa_delegator']}</strong></span>\n        <br>\n        <br>\n        <div>\n            <span><u><strong>DOA Record Details:<br></strong></u></span>\n            <span>ID Number: &nbsp;</span><span>@{triggerOutputs()?['body/cr9fa_owner']}</span>\n            <span><br>Delegation From: &nbsp;</span><span>@{triggerOutputs()?['body/cr9fa_delegator']}</span>\n            <span><br>Delegation To: &nbsp;</span><span>@{triggerOutputs()?['body/cr9fa_authorized']}</span>\n\n            <span><br>Record Created On: &nbsp;</span><span>@{triggerOutputs()?['body/createdon']}</span>\n            <span><br>Record Created By: &nbsp;</span><span>@{triggerOutputs()?['body/cr9fa_createdby']}</span>\n            <span>\n            <br>\n            <br>\n            <strong><span>@{triggerOutputs()?['body/cr9fa_authorized']}</span> will acting behalf on <span>@{triggerOutputs()?['body/cr9fa_delegator']}</span> during:</span></strong><br>\n            <span>Start Date: &nbsp;</span><span>@{triggerOutputs()?['body/cr9fa_startdate']}</span>\n            <span><br>End Date: &nbsp;</span><span>@{triggerOutputs()?['body/cr9fa_enddate']}</span>\n            <br><br>\n            <strong><span>@{triggerOutputs()?['body/cr9fa_authorized']}</span> can be reached by</strong>:\n            <span><br>Email: &nbsp;</span><span>@{triggerOutputs()?['body/cr9fa_contact2']}</span>\n            <span><br>Phone: &nbsp;</span><span>@{triggerOutputs()?['body/cr9fa_contact1']}</span>\n            <span>\n            <br>\n            <br>\n            <strong>DOA Message:</strong><br>\n            </span><span>@{triggerOutputs()?['body/cr9fa_comments']}</span><span><br>\n            </span>\n <span>\n            <br>\n           <strong>DOA Link:</strong> \n            <br></span>\n            <a href=\"https://apps.powerapps.com/play/bfc7a42d-fc9a-4042-be75-b0367c5fc1b4?tenantId=cddc1229-ac2a-4b97-b78a-0e5cacb5865c&source=portal&doaID=@{triggerOutputs()?['body/cr9fa_owner']}\">https://apps.powerapps.com/play/bfc7a42d-fc9a-4042-be75-b0367c5fc1b4?tenantId=cddc1229-ac2a-4b97-b78a-0e5cacb5865c&source=portal&doaID=@{triggerOutputs()?['body/cr9fa_owner']}</a>\n            <br>\n        </div>\n    </p>\n    <br>\n    <div style=\"font-size: 14px; font-weight: bold;\">\n      <p>This application is designed and developed by Rapid Prototype Design Unit (RPDU), Enterprise Technology Delivery, GovTechON using <a href=\"https://powerapps.microsoft.com/en-ca/\">Microsoft Power Apps</a><br>\n        Join our <a href='https://web.yammer.com/main/org/ontario.ca/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI5MDY1ODczNDA4MCJ9/new'>Low-code community</a> on Yammer to learn more about low-code and PowerApps</p><br>\n    </div>\n</main>"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            }
+          },
+          "runAfter": {
+            "Initialize_variable": [
+              "Succeeded"
+            ]
+          },
+          "expression": {
+            "equals": [
+              "@triggerOutputs()?['body/cr9fa_doastatus']",
+              1
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "2fd9b13c-f33b-4e4f-8a5b-eeee7fbbc026"
+          },
+          "type": "If"
+        }
+      }
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

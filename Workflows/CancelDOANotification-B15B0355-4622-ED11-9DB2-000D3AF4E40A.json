@@ -1,0 +1,118 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_sendmail": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "rpdudev_sharedsendmail_e1dd0"
+        },
+        "api": {
+          "name": "shared_sendmail"
+        }
+      },
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "rpdudev_sharedcommondataserviceforapps_5e294"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "When_a_row_is_added,_modified_or_deleted": {
+          "metadata": {
+            "operationMetadataId": "6d9e7e95-b281-4b6e-9911-0c901efefe58"
+          },
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "subscriptionRequest/message": 3,
+              "subscriptionRequest/entityname": "cr9fa_doarecords",
+              "subscriptionRequest/scope": 2
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Initialize_variable": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "ee380b10-b1a1-491f-ba90-a9c595b87096"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "NotifyList",
+                "type": "string",
+                "value": "@triggerOutputs()?['body/cr9fa_notificationlist']"
+              }
+            ]
+          }
+        },
+        "Condition": {
+          "actions": {
+            "Send_an_email_notification_(V3)": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "07e8991e-8a73-409b-a2cd-9fc7f4ead20a"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_sendmail",
+                  "operationId": "SendEmailV3",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sendmail"
+                },
+                "parameters": {
+                  "request/to": "@{variables('NotifyList')};",
+                  "request/subject": "Cancellation Notice - Delegation of Authority Cancelled for @{triggerOutputs()?['body/cr9fa_authorized']} - @{triggerOutputs()?['body/cr9fa_owner']}",
+                  "request/text": "<main style=\"font-family: Open Sans;\n             color: #1A1A1A;\n             font-weight: 400;\n             line-height: 1.6;\">\n\n    <div>\n        <p style=\"font-size: 16px\"><strong>@{triggerOutputs()?['body/cr9fa_ministry']}</strong>\n        <br><span>@{triggerOutputs()?['body/cr9fa_department']}</span>\n        </p>\n        <br><br><br>\n        <h3>Subject:  Delegation of Authority Cancelled, <span>@{triggerOutputs()?['body/cr9fa_delegator']}</span> - <span>@{triggerOutputs()?['body/cr9fa_cancelleddate']}</span></h3>\n    </div>\n    <hr>\n\n    <p style=\"font-size: 16px;\">\n        <strong>\n          <span>Please be advised the Delegation of Authority for </span><span>@{triggerOutputs()?['body/cr9fa_authorized']}</span><span> on behalf of </span><span>@{triggerOutputs()?['body/cr9fa_delegator']}</span><span> has been Cancelled by </span><span>@{triggerOutputs()?['body/cr9fa_cancelledby']}</span>\n        </strong>\n        <br>\n        <br>\n        <br>\n      \n        <div>\n            <span><u><strong>DOA Record Details:<br></strong></u></span>\n            <span>ID Number: &nbsp;</span><span>@{triggerOutputs()?['body/cr9fa_owner']}</span>\n            <span><br>Delegation From: &nbsp;</span><span>@{triggerOutputs()?['body/cr9fa_delegator']}</span>\n            <span><br>Delegation To: &nbsp;</span><span>@{triggerOutputs()?['body/cr9fa_authorized']}</span>\n\n            <span><br>Record Created On: &nbsp;</span><span>@{triggerOutputs()?['body/createdon']}</span>\n            <span><br>Record Created By: &nbsp;</span><span>@{triggerOutputs()?['body/cr9fa_createdby']}</span>\n            <span>\n            <br><br>\n            <span>Start Date: &nbsp;</span><span>@{triggerOutputs()?['body/cr9fa_startdate']}</span>\n            <span><br>End Date: &nbsp;</span><span>@{triggerOutputs()?['body/cr9fa_enddate']}</span>\n            <span><br>Email: &nbsp;</span><span>@{triggerOutputs()?['body/cr9fa_contact2']}</span>\n            <span><br>Phone: &nbsp;</span><span>@{triggerOutputs()?['body/cr9fa_contact1']}</span>\n            <span>\n            <br>\n            <strong>DOA Message:</strong><br>\n            </span><span>@{triggerOutputs()?['body/cr9fa_comments']}</span><span><br>\n            </span>\n        </div>\n        <br><br>\n        <div>\n            <span><u><strong>Cancellation Detail:<br></strong></u></span>\n            <span>Cancelled By: &nbsp;</span><span>@{triggerOutputs()?['body/cr9fa_cancelledby']}</span>\n            <span><br>Cancelled On: &nbsp;</span><span>@{triggerOutputs()?['body/cr9fa_cancelleddate']}</span>\n            <span><br>Reason: &nbsp;</span><span>@{triggerOutputs()?['body/cr9fa_cancelreason']}</span>        \n        </div>\n          \n    </p>\n    <br><br>\n    <div style=\"font-size: 14px; font-weight: bold;\">\n      <p>This application is designed and developed by Rapid Prototype Design Unit (RPDU), Enterprise Technology Delivery, GovTechON using <a href=\"https://powerapps.microsoft.com/en-ca/\">Microsoft Power Apps</a><br>\n        Join our <a href='https://web.yammer.com/main/org/ontario.ca/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI5MDY1ODczNDA4MCJ9/new'>Low-code community</a> on Yammer to learn more about low-code and PowerApps</p><br>\n    </div>\n</main>"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            }
+          },
+          "runAfter": {
+            "Initialize_variable": [
+              "Succeeded"
+            ]
+          },
+          "expression": {
+            "equals": [
+              "@triggerOutputs()?['body/cr9fa_doastatus']",
+              2
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "eacfbbea-93b8-43e2-95aa-b57acdb69aef"
+          },
+          "type": "If"
+        }
+      }
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}
