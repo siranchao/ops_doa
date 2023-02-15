@@ -1,8 +1,8 @@
 ## Delegation of Authority Registry
 
-This application is designed and developed by rpdu, for OPS internal use only
-Using powerApps + powerAutomate + Dataverse, version 1.0.0.6
-For full app demp please visit: [Demo Video](https://youtu.be/Wo__SPS7CUM)
+This application is designed and developed by rpdu, using powerApps + powerAutomate + Dataverse
+- Version 1.0.0.6, for OPS internal use only
+- For full app demp please visit: [Demo Video](https://youtu.be/Wo__SPS7CUM)
 
 ## Learn More
 To learn more about Microsoft Power Platform, take a look at the following resources:
