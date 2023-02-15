@@ -1,0 +1,97 @@
+<ImportExportXml version="9.2.22121.146" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SolutionManifest>
+    <UniqueName>rpdurddoa</UniqueName>
+    <LocalizedNames>
+      <LocalizedName description="rpdu.rd.doa" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="RPDU Delegation of Authority App Solution" languagecode="1033" />
+    </Descriptions>
+    <Version>1.0.0.6</Version>
+    <Managed>0</Managed>
+    <Publisher>
+      <UniqueName>RPDU_Dev_Solution_Publisher</UniqueName>
+      <LocalizedNames>
+        <LocalizedName description="RPDU DEV" languagecode="1033" />
+      </LocalizedNames>
+      <Descriptions>
+        <Description description="RPDU Solution Publisher for DEV environment" languagecode="1033" />
+      </Descriptions>
+      <EMailAddress xsi:nil="true"></EMailAddress>
+      <SupportingWebsiteUrl xsi:nil="true"></SupportingWebsiteUrl>
+      <CustomizationPrefix>rpdudev</CustomizationPrefix>
+      <CustomizationOptionValuePrefix>69126</CustomizationOptionValuePrefix>
+      <Addresses>
+        <Address>
+          <AddressNumber>1</AddressNumber>
+          <AddressTypeCode>1</AddressTypeCode>
+          <City xsi:nil="true"></City>
+          <County xsi:nil="true"></County>
+          <Country xsi:nil="true"></Country>
+          <Fax xsi:nil="true"></Fax>
+          <FreightTermsCode xsi:nil="true"></FreightTermsCode>
+          <ImportSequenceNumber xsi:nil="true"></ImportSequenceNumber>
+          <Latitude xsi:nil="true"></Latitude>
+          <Line1 xsi:nil="true"></Line1>
+          <Line2 xsi:nil="true"></Line2>
+          <Line3 xsi:nil="true"></Line3>
+          <Longitude xsi:nil="true"></Longitude>
+          <Name xsi:nil="true"></Name>
+          <PostalCode xsi:nil="true"></PostalCode>
+          <PostOfficeBox xsi:nil="true"></PostOfficeBox>
+          <PrimaryContactName xsi:nil="true"></PrimaryContactName>
+          <ShippingMethodCode>1</ShippingMethodCode>
+          <StateOrProvince xsi:nil="true"></StateOrProvince>
+          <Telephone1 xsi:nil="true"></Telephone1>
+          <Telephone2 xsi:nil="true"></Telephone2>
+          <Telephone3 xsi:nil="true"></Telephone3>
+          <TimeZoneRuleVersionNumber xsi:nil="true"></TimeZoneRuleVersionNumber>
+          <UPSZone xsi:nil="true"></UPSZone>
+          <UTCOffset xsi:nil="true"></UTCOffset>
+          <UTCConversionTimeZoneCode xsi:nil="true"></UTCConversionTimeZoneCode>
+        </Address>
+        <Address>
+          <AddressNumber>2</AddressNumber>
+          <AddressTypeCode>1</AddressTypeCode>
+          <City xsi:nil="true"></City>
+          <County xsi:nil="true"></County>
+          <Country xsi:nil="true"></Country>
+          <Fax xsi:nil="true"></Fax>
+          <FreightTermsCode xsi:nil="true"></FreightTermsCode>
+          <ImportSequenceNumber xsi:nil="true"></ImportSequenceNumber>
+          <Latitude xsi:nil="true"></Latitude>
+          <Line1 xsi:nil="true"></Line1>
+          <Line2 xsi:nil="true"></Line2>
+          <Line3 xsi:nil="true"></Line3>
+          <Longitude xsi:nil="true"></Longitude>
+          <Name xsi:nil="true"></Name>
+          <PostalCode xsi:nil="true"></PostalCode>
+          <PostOfficeBox xsi:nil="true"></PostOfficeBox>
+          <PrimaryContactName xsi:nil="true"></PrimaryContactName>
+          <ShippingMethodCode>1</ShippingMethodCode>
+          <StateOrProvince xsi:nil="true"></StateOrProvince>
+          <Telephone1 xsi:nil="true"></Telephone1>
+          <Telephone2 xsi:nil="true"></Telephone2>
+          <Telephone3 xsi:nil="true"></Telephone3>
+          <TimeZoneRuleVersionNumber xsi:nil="true"></TimeZoneRuleVersionNumber>
+          <UPSZone xsi:nil="true"></UPSZone>
+          <UTCOffset xsi:nil="true"></UTCOffset>
+          <UTCConversionTimeZoneCode xsi:nil="true"></UTCConversionTimeZoneCode>
+        </Address>
+      </Addresses>
+    </Publisher>
+    <RootComponents>
+      <RootComponent type="1" schemaName="cr9fa_doafeedback" behavior="0" />
+      <RootComponent type="1" schemaName="cr9fa_doarecords" behavior="0" />
+      <RootComponent type="9" schemaName="cr9fa_doastatus" behavior="0" />
+      <RootComponent type="9" schemaName="cr9fa_draft" behavior="0" />
+      <RootComponent type="29" id="{278a1aac-4238-ed11-9db1-000d3af4c81e}" behavior="0" />
+      <RootComponent type="29" id="{4340fc8a-2d38-ed11-9db1-000d3af4c81e}" behavior="0" />
+      <RootComponent type="29" id="{a65b0355-4622-ed11-9db2-000d3af4e40a}" behavior="0" />
+      <RootComponent type="29" id="{b15b0355-4622-ed11-9db2-000d3af4e40a}" behavior="0" />
+      <RootComponent type="29" id="{ff554118-5e23-ed11-9db2-000d3af4c81e}" behavior="0" />
+      <RootComponent type="300" schemaName="rpdudev_delegationofauthority_7687c" behavior="0" />
+    </RootComponents>
+    <MissingDependencies />
+  </SolutionManifest>
+</ImportExportXml>
